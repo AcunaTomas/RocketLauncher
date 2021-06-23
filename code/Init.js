@@ -20,6 +20,10 @@ var platforms;
 var background;
 var rings;
 var jugde;
+var birds;
+var map;
+var tileset;
+var lvljuan;
 
 //Movement keys
 var cursors;
@@ -34,6 +38,7 @@ var fueltank;
 var speed = 200;
 var pwup = false;
 
+
 //Ring Combo Logic
 var hoopcombo;
 var comboval = 0;
@@ -44,8 +49,9 @@ var lastcol;
 //Informational - HUD
 var combotext;
 var coolcam;
-var time;
-
+var jscore;
+var time = 0;
+var limit;
 //Functionality
 var gameover = false
 

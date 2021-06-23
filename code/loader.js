@@ -15,9 +15,11 @@ class loader extends Phaser.Scene
         this.load.spritesheet('marselo', 'assets/Marselo.png', { frameWidth: 36, frameHeight: 64 })
         this.load.spritesheet('judge', 'assets/Judge.png', { frameWidth: 32, frameHeight: 48 })
         this.load.spritesheet('bird', 'assets/bIRD.png', { frameWidth: 32, frameHeight: 20 })
+        this.load.image('tiles', 'assets/maps/Tilemap1.png')
+        this.load.tilemapTiledJSON('map1', 'assets/maps/Leveljuan.json')
     }
     
-    create()
+    create(delta)
     {
         this.anims.create({
             key: 'right',
@@ -56,6 +58,10 @@ class loader extends Phaser.Scene
         ta = this.add.text(25, 300, '', { fontSize: '28px', fill: '#FFF' });
         ta.setText('Build 0.2 - New Mechanics test - Click here!')
         ta.setInteractive()
-        ta.on('pointerdown', () => this.scene.start('Lvl1') ); 
+        ta.on('pointerdown', () => this.scene.start('Lvl1')); 
+    }
+    update(delta)
+    {
+        time = delta
     }
 }
