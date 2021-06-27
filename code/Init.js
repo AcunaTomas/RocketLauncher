@@ -14,7 +14,7 @@ var config = {
             debug: false
         }
     },
-    scene: [loader,menu, Lvl1, Lvl2]
+    scene: [loader,menu, Lvl1, Lvl2, gameoverscr]
     
 };
 
@@ -26,6 +26,7 @@ var background;
 var rings;
 var jugde;
 var birds;
+var Ballon;
 var map;
 var tileset;
 var lvljuan;
@@ -66,5 +67,18 @@ var paths
 var lives = 3
 var deathcause = 0
 
+
+//Music
+var mus
+var gameplay
+var gover
+
+//Sounds
+var jump
+var hurt
+var explode
+var power
+var ringsnd
+var baloob
 
 var game = new Phaser.Game(config);

@@ -14,6 +14,8 @@ class menu extends Phaser.Scene
     }
     create()
     {
+        gover.stop()
+        mus.play()
         this.add.image(400,300,'mbackground')
         var a = this.add.image(330,450, 'button')
         var b = this.add.image(575,450, 'button2')

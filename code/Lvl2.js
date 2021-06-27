@@ -7,6 +7,9 @@ class Lvl2 extends Phaser.Scene
 
     create()
     {
+        //music
+        mus.stop()
+        gameplay.play()
         //Creation - Camera, Physics Groups, Solid Objects, Controls
         coolcam= this.cameras.main;
         this.cameras.main.setBounds(0,0,4850,2875);
@@ -50,6 +53,19 @@ class Lvl2 extends Phaser.Scene
         }
         )
 
+        Ballon = this.physics.add.staticGroup();
+
+        var t
+        for (t=0; t<3; t++)
+        {
+            if (Math.floor(Math.random() * 10) < 5)
+            {
+                Ballon.create(2000+(Math.floor(Math.random()*500)),100, 'baloon')
+            }
+        }
+
+
+
         cursors = this.input.keyboard.createCursorKeys();
         keya = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keys = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -58,6 +74,7 @@ class Lvl2 extends Phaser.Scene
 
         deathcause = 0
         hoopcombo = 0
+        comboval = 0
         score = 0
         pwup = false
         limit = this.time.delayedCall(120000, this.onEvent, [], this);;
@@ -84,7 +101,7 @@ class Lvl2 extends Phaser.Scene
         this.physics.add.overlap(player, jugde, this.endlevel, null, this);
         this.physics.add.overlap(player, rings, this.ringcombo, null, this);
         this.physics.add.overlap(player, birds, this.death, null, this);
-
+        this.physics.add.overlap(player, Ballon, this.lifeup, null, this);
 
     }
 
@@ -92,10 +109,14 @@ class Lvl2 extends Phaser.Scene
     {
         if (player.y > 2900)
         {
-            this.death()
+            this.endlevel()
+            deathcause = 1
         }
         if (lvlcomplete)
         {
+            gameplay.stop()
+            score += comboval*200
+            comboval = 0
             if (deathcause == 0)
             {
                 combotext.setText('Final score:' + score + ' Judges Rating:')
@@ -116,8 +137,15 @@ class Lvl2 extends Phaser.Scene
         
                 })
             }
+            else if (deathcause == 1)
+            {
+                gameover = true
+                player.anims.play('death')
+            }
             else
             {
+                hurt.play()
+                explode.play()
                 gameover = true
                 player.anims.play('death')
             }
@@ -127,7 +155,7 @@ class Lvl2 extends Phaser.Scene
                 {
                     if (lives < 1)
                     {
-                        this.scene.start('menu')
+                        this.scene.start('gameoverscr')
                         gameover = false
                         lvlcomplete = false
                         time = delta
@@ -218,6 +246,7 @@ class Lvl2 extends Phaser.Scene
         if (Phaser.Input.Keyboard.JustDown(cursors.space) && launch > 0 && player.body.blocked.down == false)
         {
             player.setVelocityY(-400)
+            jump.play()
             launch += -1
         }
 
@@ -249,11 +278,13 @@ class Lvl2 extends Phaser.Scene
     {
         fueltank.destroy(true,true);
         pwup = true
+        power.play()
     }
     
     ringcombo(player, rings)
     {
         rings.destroy(true,true);
+        ringsnd.play()
         lastcol = lastcol + comboval
         comboval += 1;
         if (comboval == 1)
@@ -273,30 +304,31 @@ class Lvl2 extends Phaser.Scene
     }
     onEvent()
     {
-        lives += -1
-        if (lives < 1)
-        {
-            lvlcomplete = true
-        }
-        else
-        {
-            this.scene.restart()
-            score = 0
-        }
-        
+        lvlcomplete = true
+        deathcause = 1
+        hurt.play()
     }
 
-    death()
+    death(player, bird)
     {
-        lives += -1
-        if (lives < 1)
+        if (pwup == true)
         {
-            lvlcomplete = true
-            score = 0
+            pwup = false
+            bird.destroy(true,true)
         }
         else
         {
-            this.scene.restart()
+            lvlcomplete = true
+            deathcause = 1
+            explode.play()
+            bird.destroy(true,true)
         }
+    }
+
+    lifeup(player,Ballon)
+    {
+        Ballon.destroy(true,true)
+        baloob.play()
+        lives+= 1
     }
 }

@@ -7,6 +7,8 @@ class Lvl1 extends Phaser.Scene
 
     create()
     {
+        mus.stop() //stops menu music
+        gameplay.play()
         //Creation - Camera, Physics Groups, Solid Objects, Controls
         coolcam= this.cameras.main;
         this.cameras.main.setBounds(0,0,5600,1600);
@@ -22,15 +24,19 @@ class Lvl1 extends Phaser.Scene
         rings = this.physics.add.staticGroup();
         fueltank = this.physics.add.group({});
         birds = this.physics.add.group({})
+        Ballon = this.physics.add.staticGroup();
+
+        var t
+        for (t=0; t<3; t++)
+        {
+            if (Math.floor(Math.random() * 10) < 5)
+            {
+                Ballon.create(2000+(Math.floor(Math.random()*500)),50, 'baloon')
+            }
+        }
+        
 
         var sp = map.findObject("obj1", obj => obj.name === "sp");
-        var aea = map.createFromObjects("obj1", name = "Tank" ,{key : 'fuel'})
-        fueltank.addMultiple(aea, true)
-        fueltank.children.iterate(function (child)
-        {
-            child.anims.play('tank')
-
-        })
         var rgs = map.createFromObjects("rings",name = "ring" ,{key:'ring'})
         rings.addMultiple(rgs, true)
         rings.children.iterate(function (child)
@@ -61,6 +67,7 @@ class Lvl1 extends Phaser.Scene
 
         hoopcombo = 0
         score = 0
+        comboval = 0
         pwup = false
         limit = this.time.delayedCall(120000, this.onEvent, [], this);
         this.time.addEvent(limit);
@@ -87,6 +94,7 @@ class Lvl1 extends Phaser.Scene
         this.physics.add.overlap(player, jugde, this.endlevel, null, this);
         this.physics.add.overlap(player, rings, this.ringcombo, null, this);
         this.physics.add.overlap(player, birds, this.death, null, this);
+        this.physics.add.overlap(player, Ballon, this.lifeup, null, this);
 
     }
 
@@ -94,6 +102,9 @@ class Lvl1 extends Phaser.Scene
     {
         if (lvlcomplete)
         {
+            gameplay.stop()
+            score += comboval*200
+            comboval = 0
             if (deathcause == 0)
             {
                 combotext.setText('Final score:' + score + ' Judges Rating:')
@@ -116,6 +127,7 @@ class Lvl1 extends Phaser.Scene
             }
             else
             {
+
                 gameover = true
                 player.anims.play('death')
             }
@@ -125,7 +137,7 @@ class Lvl1 extends Phaser.Scene
                 {
                     if (lives < 1)
                     {
-                        this.scene.start('menu')
+                        this.scene.start('gameoverscr')
                         gameover = false
                         lvlcomplete = false
                         time = delta
@@ -218,6 +230,7 @@ class Lvl1 extends Phaser.Scene
             if (Phaser.Input.Keyboard.JustDown(cursors.space) && launch > 0 && player.body.blocked.down == false)
             {
                 player.setVelocityY(-400)
+                jump.play()
                 launch += -1
             }
     
@@ -231,11 +244,13 @@ class Lvl1 extends Phaser.Scene
     {
         fueltank.destroy(true,true);
         pwup = true
+        power.play()
     }
     
     ringcombo(player, rings)
     {
         rings.destroy(true,true);
+        ringsnd.play()
         lastcol = lastcol + comboval
         comboval += 1;
         if (comboval == 1)
@@ -258,11 +273,31 @@ class Lvl1 extends Phaser.Scene
     {
         lvlcomplete = true
         deathcause = 1
+        hurt.play()
     }
 
-    death()
+    death(player, bird)
     {
-        lvlcomplete = true
-        deathcause = 1
+        if (pwup == true)
+        {
+            pwup = false
+            bird.destroy(true,true)
+        }
+        else
+        {
+            lvlcomplete = true
+            deathcause = 1
+            explode.play()
+            bird.destroy(true,true)
+        }
+
+
+    }
+
+    lifeup(player,Ballon)
+    {
+        Ballon.destroy(true,true)
+        baloob.play()
+        lives+= 1
     }
 }
