@@ -56,11 +56,11 @@ class Lvl2 extends Phaser.Scene
         Ballon = this.physics.add.staticGroup();
 
         var t
-        for (t=0; t<3; t++)
+        for (t=0; t<1; t++)
         {
             if (Math.floor(Math.random() * 10) < 5)
             {
-                Ballon.create(2000+(Math.floor(Math.random()*500)),100, 'baloon')
+                Ballon.create(2000+(Math.floor(Math.random()*500)),75, 'baloon')
             }
         }
 
@@ -141,6 +141,7 @@ class Lvl2 extends Phaser.Scene
             {
                 gameover = true
                 player.anims.play('death')
+                this.physics.pause()
             }
             else
             {
@@ -148,6 +149,7 @@ class Lvl2 extends Phaser.Scene
                 explode.play()
                 gameover = true
                 player.anims.play('death')
+                this.physics.pause()
             }
             if (Phaser.Input.Keyboard.JustDown(cursors.space))
             {

@@ -27,7 +27,7 @@ class Lvl1 extends Phaser.Scene
         Ballon = this.physics.add.staticGroup();
 
         var t
-        for (t=0; t<3; t++)
+        for (t=0; t<2; t++)
         {
             if (Math.floor(Math.random() * 10) < 5)
             {
@@ -78,7 +78,7 @@ class Lvl1 extends Phaser.Scene
         combotext.scrollFactorY = 0
 
         jugde = this.physics.add.staticGroup();
-        jugde.create(5575, 1500, 'judge');
+        jugde.create(5550, 1500, 'judge');
         jscore = this.add.text(300, 400, '', { fontSize: '72px', fill: '#000' });
         jscore.setScrollFactor(0);
         
@@ -127,9 +127,9 @@ class Lvl1 extends Phaser.Scene
             }
             else
             {
-
                 gameover = true
                 player.anims.play('death')
+                this.physics.pause()
             }
             if (Phaser.Input.Keyboard.JustDown(cursors.space))
             {
