@@ -1,7 +1,12 @@
 var config = {
     type: Phaser.WEBGL,
-    width: 800,
-    height: 600,
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 800,
+        height: 600,
+    },
+
     physics: {
         default: "arcade",
         arcade: {
@@ -9,7 +14,7 @@ var config = {
             debug: false
         }
     },
-    scene: [loader, Lvl1]
+    scene: [loader,menu, Lvl1, Lvl2]
     
 };
 
@@ -24,6 +29,8 @@ var birds;
 var map;
 var tileset;
 var lvljuan;
+var lvldos;
+
 
 //Movement keys
 var cursors;
@@ -54,7 +61,10 @@ var time = 0;
 var limit;
 //Functionality
 var gameover = false
-
+var lvlcomplete = false
+var paths
+var lives = 3
+var deathcause = 0
 
 
 var game = new Phaser.Game(config);
