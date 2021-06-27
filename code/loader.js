@@ -7,9 +7,22 @@ class loader extends Phaser.Scene
 
     preload()
     {
+        //music
+        this.load.audio('gver', 'assets/music/gver.wav')
+        this.load.audio('menu', 'assets/music/menu.wav')
+        this.load.audio('lvls', 'assets/music/gameplay.wav')
+        //sounds
+        this.load.audio('jump', 'assets/music/jump.wav')
+        this.load.audio('hurt', 'assets/music/hurtt.wav')
+        this.load.audio('explode', 'assets/music/explode.wav')
+        this.load.audio('pwup', 'assets/music/powerup.wav')
+        this.load.audio('rings', 'assets/music/ring.wav')
+        this.load.audio('baloons', 'assets/music/baloob.wav')
+        //images
         this.load.image('loading', 'assets/loadket.png')
         this.load.image('background', 'assets/backgroundtest.png')
         this.load.image('floor', 'assets/Floor.png')
+        this.load.image('baloon', 'assets/Ballon.png')
         this.load.image('platform','assets/Platforms.png')
         this.load.spritesheet('fuel','assets/fuel.png', {frameWidth: 32, frameHeight: 32})
         this.load.spritesheet('ring' , 'assets/ring.png', {frameWidth: 52, frameHeight: 133})
@@ -40,8 +53,9 @@ class loader extends Phaser.Scene
 
         this.anims.create({
             key: 'death',
-            frames: [ { key: 'marselo', frame: 3 } ],
-            frameRate: 20
+            frames: this.anims.generateFrameNumbers('marselo', { start: 3, end: 5 }),
+            frameRate: 3,
+            repeat: -1
         });
 
         this.anims.create({
@@ -89,6 +103,19 @@ class loader extends Phaser.Scene
             frameRate: 4,
             repeat: -1
         });
+
+        gameplay = this.sound.add('lvls')
+        mus = this.sound.add('menu')
+        gover = this.sound.add('gver')
+
+
+        jump = this.sound.add('jump')
+        hurt = this.sound.add('hurt')
+        explode = this.sound.add('explode')
+        power = this.sound.add('pwup')
+        ringsnd = this.sound.add('rings')
+        baloob = this.sound.add('baloons')
+
         var ta
         ta = this.add.text(200, 300, '', { fontSize: '28px', fill: '#FFF' });
         this.add.image(400,200,'loading')
