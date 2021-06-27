@@ -10,6 +10,9 @@ Videogame for programming homework
 	saltar, doble salto, triple salto
 	    
 	    
--To-do list:
-	-Terminar animaciones
-	-Terminar de implementar a los enemigos
+-Objetivo:
+
+Llegar hasta donde se encuentran el jues, pasando por la mayor cantidad de aros posibles, con un minimo de puntuacion de 1500 se pasa al siguiente nivel.
+
+
+
