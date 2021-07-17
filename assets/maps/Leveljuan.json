@@ -344,8 +344,19 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":6,
+         "name":"tank",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":6,
+ "nextlayerid":7,
  "nextobjectid":79,
  "orientation":"orthogonal",
  "renderorder":"right-down",
