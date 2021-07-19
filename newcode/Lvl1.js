@@ -74,7 +74,7 @@ class Lvl1 extends Phaser.Scene
         hoopcombo = 0;
         score = 0;
         comboval = 0;
-        var ringcount = 0;
+        ringcount = 0;
         pwup = false
         firstpickup = false;
 
