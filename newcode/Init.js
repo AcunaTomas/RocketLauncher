@@ -58,6 +58,7 @@ var pwup = false;
 //Ring Combo Logic
 var hoopcombo;
 var comboval = 0;
+var ringcount = 0;
 var score = 0;
 var firstpickup
 var lastcol;
@@ -69,6 +70,9 @@ var timers = [];
 //Informational - HUD
 var combotext;
 var timetext;
+var ringtext;
+var livestext;
+var scoretext;
 var coolcam;
 var jscore;
 var time = 0;
