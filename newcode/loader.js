@@ -33,7 +33,6 @@ class loader extends Phaser.Scene
                 break
             
             case 3:
-                this.load.audio('gver', '../assets/music/gver.wav')
                 console.log(3)
                 break
             
@@ -45,12 +44,16 @@ class loader extends Phaser.Scene
     
     create(delta)
     {
+        this.sound.stopAll();
         var ta
-        ta = this.add.text(200, 300, '', { fontSize: '28px', fill: '#FFF' });
+        ta = this.add.text(125, 300, '', { fontSize: '28px', fill: '#FFF' });
+        var hint = this.add.text(120, 50, 'Consejo: al agarrar un aro,\nse te otorga un periodo de 10 segundos\nen el que conseguiras mas puntos de lo normal', { fontSize: '22px', fill: '#FFF' });
         this.add.image(400,200,'loading')
-        ta.setText('Click here to continue!')
+        var bt = this.add.image(400,525, 'button')
+        bt.setInteractive()
+        ta.setText('Objetivo: Conseguir 2000 puntos y \nllegar a la meta!\nLimite de tiempo: 100 segundos!')
         ta.setInteractive()
-        ta.on('pointerdown', () => this.scene.start('Lvl1'));
+        bt.on('pointerdown', () => this.scene.start('Lvl1'));
     }
     update(delta)
     {

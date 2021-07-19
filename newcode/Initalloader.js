@@ -11,11 +11,15 @@ class initalloader extends Phaser.Scene
         this.load.image('loading', 'assets/loadket.png')
 
         this.load.audio('menu', 'assets/music/menu.wav')
+        this.load.audio('gver', '../assets/music/gver.wav')
+
         //images
-        this.load.image('mbackground','assets/title.png')
-        this.load.image('button', 'assets/button.png')
-        this.load.image('button2', 'assets/button2.png')
+        this.load.image('mbackground','assets/Nuevo/Title.png')
+        this.load.image('button', 'assets/Nuevo/Boton1.png')
+        this.load.image('button2', 'assets/Nuevo/Boton2.png')
+        this.load.image('button3', 'assets/Nuevo/Boton3.png')
         this.load.image('credits', 'assets/credits.png')
+        this.load.image('help', 'assets/Nuevo/Help.png')
 
          //sounds
          this.load.audio('lvls', 'assets/music/gameplay.wav')
@@ -27,13 +31,14 @@ class initalloader extends Phaser.Scene
          this.load.audio('baloons', 'assets/music/baloob.wav')
          //images
 
-         this.load.image('baloon', 'assets/Ballon.png')
+         this.load.image('baloon', 'assets/Nuevo/Globo.png')
+         this.load.image('clock', 'assets/Nuevo/Clock.png')
          //sprites
-         this.load.spritesheet('fuel','assets/fuel.png', {frameWidth: 32, frameHeight: 32})
-         this.load.spritesheet('ring' , 'assets/ring.png', {frameWidth: 52, frameHeight: 133})
-         this.load.spritesheet('marselo', 'assets/Marselo.png', { frameWidth: 36, frameHeight: 64 })
-         this.load.spritesheet('judge', 'assets/Judge.png', { frameWidth: 32, frameHeight: 48 })
-         this.load.spritesheet('bird', 'assets/bIRD.png', { frameWidth: 32, frameHeight: 20 })
+         this.load.spritesheet('fuel','assets/Nuevo/gas.png', {frameWidth: 32, frameHeight: 40})
+         this.load.spritesheet('ring' , 'assets/Nuevo/Aro.png', {frameWidth: 88, frameHeight: 128})
+         this.load.spritesheet('marselo', 'assets/Nuevo/Mashio.png', { frameWidth: 45, frameHeight: 73 })
+         this.load.spritesheet('judge', 'assets/Nuevo/Judge1.png', { frameWidth: 56, frameHeight: 144 })
+         this.load.spritesheet('bird', 'assets/Nuevo/Bird.png', { frameWidth: 64, frameHeight: 32 })
 
 
          this.load.image('tile1', 'assets/maps/Tilemap1.png')
@@ -57,11 +62,19 @@ class initalloader extends Phaser.Scene
         });
 
         this.anims.create({
-            key: 'death',
-            frames: this.anims.generateFrameNumbers('marselo', { start: 3, end: 5 }),
+            key: 'jump',
+            frames: [ { key: 'marselo', frame: 3 } ],
             frameRate: 3,
             repeat: -1
         });
+
+        this.anims.create({
+            key: 'death',
+            frames: this.anims.generateFrameNumbers('marselo', { start: 4, end: 5 }),
+            frameRate: 3,
+            repeat: -1
+        });
+
 
         this.anims.create({
             key: 'judging',
@@ -117,8 +130,8 @@ class initalloader extends Phaser.Scene
         power = this.sound.add('pwup')
         ringsnd = this.sound.add('rings')
         baloob = this.sound.add('baloons')
-
-
+        mus = this.sound.add('menu')
+        gover = this.sound.add('gver')
         
         var ta
         ta = this.add.text(200, 300, '', { fontSize: '28px', fill: '#FFF' });

@@ -7,18 +7,19 @@ class Lvl1 extends Phaser.Scene
 
     create()
     {
-        //mus.stop() //stops menu music
-        //gameplay.play()
+        gameplay.play()
         //Creation - Camera, Physics Groups, Solid Objects, Controls
-
-        mapx = this.make.tilemap({key: ('map' + scene.toString())})
-        tilemapx = mapx.addTilesetImage('Tilemap' + scene.toString(), 'tile' + scene.toString(), 32, 32)
 
         coolcam= this.cameras.main;
         this.cameras.main.setBounds(0,0,mapsizex,mapsizey);
         background = this.add.image(mapsizex/2,mapsizey/2, 'background' + scene.toString());
 
-        //map = this.make.tilemap({key: 'map1'});
+
+        //Load Tilemaps
+        mapx = this.make.tilemap({key: ('map' + scene.toString())})
+        tilemapx = mapx.addTilesetImage('Tilemap' + scene.toString(), 'tile' + scene.toString(), 32, 32)
+
+        //Parse Level Data and Objects
         lvljuan = mapx.createLayer('1', tilemapx);
         lvljuan.setCollisionByProperty({collides : true});
 
@@ -66,7 +67,18 @@ class Lvl1 extends Phaser.Scene
         }
         )
         
+        //Reset Game State Variables
+
         deathcause = 0
+        lvlcomplete = false
+        hoopcombo = 0
+        score = 0
+        comboval = 0
+        pwup = false
+        firstpickup = false;
+
+
+        //Controls
 
         cursors = this.input.keyboard.createCursorKeys();
         keya = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -74,20 +86,26 @@ class Lvl1 extends Phaser.Scene
         keyd = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keyw = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
 
-        firstpickup = false;
-
-        hoopcombo = 0
-        score = 0
-        comboval = 0
-        pwup = false
+        //Timers
         limit = this.time.addEvent({delay: 100000, callback: this.onEvent});
-        
+        combolimit = new Phaser.Time.TimerEvent({ delay: 10000, callback: this.endcombo})
         this.time.addEvent(limit);
 
         //HUD
-        combotext = this.add.text(16, 16, '', { fontSize: '28px', fill: '#000' });
+        combotext = this.add.text(32, 50, '', { fontSize: '28px', fill: '#000' });
+        timetext = this.add.text(40, 8, '', { fontSize: '28px', fill: '#000' });
+        timetext.scrollFactorX = 0
+        timetext.scrollFactorY = 0
+        var clock = this.add.image(16,16, 'clock')
+        var hudring = this.add.image(16,55, 'ring').setScale(0.3)
+        hudring.scrollFactorX = 0
+        hudring.scrollFactorY = 0
+        clock.scrollFactorX = 0
+        clock.scrollFactorY = 0
         combotext.scrollFactorX = 0
         combotext.scrollFactorY = 0
+
+        //Collision
 
         player = this.physics.add.sprite(sp.x,sp.y,'marselo');
 
@@ -95,12 +113,9 @@ class Lvl1 extends Phaser.Scene
         jscore = this.add.text(300, 400, '', { fontSize: '72px', fill: '#000' });
         jscore.setScrollFactor(0);
         
-        jugde.create(400,500, 'judge').setScrollFactor(0).setScale(5.0).anims.play('judging');
-        jugde.children.iterate( function (child)
-        {
-            child.setVisible(false)
+        jhud = this.physics.add.staticGroup();
+        jhud.create(400,500, 'judge').setScrollFactor(0).setScale(2.0).anims.play('judging').setVisible(false);
 
-        })
 
         jugde.create(jp.x, jp.y, 'judge');
 
@@ -121,35 +136,54 @@ class Lvl1 extends Phaser.Scene
 
     update(delta)
     {
-        if (lvlcomplete)
+        if (lvlcomplete) //Ugly Scene Changer
         {
             this.gameover()
+            gameplay.stop()
             if (Phaser.Input.Keyboard.JustDown(cursors.space))
             {
-                lvlcomplete = false
-
-                if (lives < 1 && deathcause > 0)
+                if (deathcause == 0)
                 {
-                    this.scene.start('menu')
-                }
-                else if (deathcause > 0)
-                {
-                    lives += -1
-                    this.scene.restart()
-                }
-                else
-                {
-                    if (scene < 2)
+                    if (score >= 2000)
                     {
-                        scene += 1
-                        this.scene.start('loader')
+                        if (scene < 2)
+                        {
+                            scene += 1
+                            this.scene.start('loader')
+                        }
+                        else
+                        {
+                            this.scene.start('menu')
+                        }
+
                     }
                     else
                     {
-                        this.scene.start('menu')
+                        if (lives > 1)
+                        {
+                            lives += -1
+                            this.scene.restart()
+                        }
+                        else
+                        {
+                            this.scene.start('gameoverscr')
+                        }
+
                     }
+
                 }
-                
+                else
+                {
+                    if (lives > 1)
+                        {
+                            lives += -1
+                            this.scene.restart()
+                        }
+                        else
+                        {
+                            this.scene.start('gameoverscr')
+                        }
+                }
             }
         }
         else
@@ -177,26 +211,46 @@ class Lvl1 extends Phaser.Scene
             if (keya.isDown)
             {
                 player.setVelocityX(-200)
-                player.anims.play('right', true)
                 player.flipX = true
+                if (player.body.blocked.down)
+                {
+                    player.anims.play('right', true)
+                }
+
             }
             else if (keyd.isDown)
             {
                 player.setVelocityX(200)
-                player.anims.play('right', true)
                 player.flipX = false
+                if (player.body.blocked.down)
+                {
+                    player.anims.play('right', true)
+                }
             }
             else
             {
                 player.setVelocityX(0);
-                player.anims.play('idle', true)
+                if (player.body.blocked.down)
+                {
+                    player.anims.play('idle', true)
+                }
+
             }
-    
+            
+
+
             if (cursors.space.isDown && player.body.blocked.down)
             {
                 player.setVelocityY(-300)
+                player.anims.play('jump')
             }
-    
+            if (keys.isDown && player.body.blocked.down == false)
+            {
+                player.setVelocityY(500)
+                player.anims.play('idle')
+            }
+
+
             if (Phaser.Input.Keyboard.JustDown(cursors.space) && launch > 0 && player.body.blocked.down == false)
             {
                 player.setVelocityY(-400)
@@ -204,9 +258,33 @@ class Lvl1 extends Phaser.Scene
                 launch += -1
             }
             
-            combotext.setText('Time:' + limit.getProgress().toString().substr(0,5) +  'Combo:' + comboval.toString() + ' Score:' + score.toString() + " Lives: " + lives)
-            
 
+            if (scene > 1)
+            {
+                birds.children.iterate(function (child)
+                {
+                    if (player.x - child.x < 30 && player.y - child.y < 60)
+                    {
+                        child.body.setVelocityX(-75)
+                        child.body.setAccelerationX(-5)
+                        child.flipX = false
+                    }
+                    else if (child.x - player.x < -30 && player.y - child.y > 60)
+                    {
+                        child.body.setVelocityX(75)
+                        child.body.setAccelerationX(5)
+                        child.flipX = true
+                    }
+                    else
+                    {
+                        child.body.setVelocityX(0)
+                        child.body.setAccelerationX(0)
+                    }
+                })
+            }
+
+            combotext.setText(':' + comboval.toString() + ' Score:' + score.toString() + " Lives: " + lives)
+            timetext.setText(':' + limit.getProgress().toString().substr(2,2))
 
 
 
@@ -226,25 +304,22 @@ class Lvl1 extends Phaser.Scene
     {
         rings.destroy(true,true);
         ringsnd.play()
-        lastcol = lastcol + comboval;
         comboval += 1;
         score += 100 + (100*comboval);
 
         if (firstpickup)
         {
-            //combolimit = this.time.addEvent({ delay: 20000});
+
         }
         else
         {
-            //this.time.addEvent(combolimit);
+            combolimit = new Phaser.Time.TimerEvent({ delay: 10000, callback: this.endcombo});
+            this.time.addEvent(combolimit);
         }
         firstpickup = true;
 
 
     }
-
-
-
 
     endcombo()
     {
@@ -255,6 +330,7 @@ class Lvl1 extends Phaser.Scene
     endlevel(player,judge)
     {
         lvlcomplete = true
+
     }
     
     onEvent()
@@ -272,9 +348,10 @@ class Lvl1 extends Phaser.Scene
         }
         else
         {
+            player.anims.play('death')
+            explode.play()
             lvlcomplete = true
             deathcause = 1
-            explode.play()
 
         }
         bird.destroy(true,true)
@@ -291,22 +368,22 @@ class Lvl1 extends Phaser.Scene
     gameover()
     {
         this.physics.pause()
-        if (score >= 1500 && deathcause == 0)
+        if (score >= 2000 && deathcause == 0)
         {
-
-            jugde.children.iterate(function (child)
+            jhud.children.iterate(function (jhud)
             {
-                child.anims.play('yay')
-                child.setVisible(true)
+                jhud.anims.play('yay')
+                jhud.setVisible(true)
             })
-            
+
+
         }
         else
         {
-            jugde.children.iterate(function (child)
+            jhud.children.iterate(function (jhud)
             {
-                child.anims.play('nay')
-                child.setVisible(true)
+                jhud.anims.play('nay')
+                jhud.setVisible(true)
             })
         }
     }

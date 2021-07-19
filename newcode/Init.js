@@ -14,7 +14,7 @@ var config = {
             debug: false
         }
     },
-    scene: [initalloader, menu ,loader, Lvl1]
+    scene: [initalloader, menu ,loader, Lvl1, gameoverscr]
     
 };
 
@@ -68,10 +68,12 @@ var timers = [];
 
 //Informational - HUD
 var combotext;
+var timetext;
 var coolcam;
 var jscore;
 var time = 0;
 var limit;
+var jhud;
 
 //Functionality
 var gameover = false
