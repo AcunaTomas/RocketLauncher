@@ -256,7 +256,6 @@ class Lvl1 extends Phaser.Scene
             if (cursors.space.isDown && player.body.blocked.down)
             {
                 player.setVelocityY(-300)
-                player.anims.play('jump')
             }
             if (keys.isDown && player.body.blocked.down == false)
             {
@@ -268,6 +267,7 @@ class Lvl1 extends Phaser.Scene
             if (Phaser.Input.Keyboard.JustDown(cursors.space) && launch > 0 && player.body.blocked.down == false)
             {
                 player.setVelocityY(-400)
+                player.anims.play('jump')
                 jump.play()
                 launch += -1
             }
@@ -356,6 +356,7 @@ class Lvl1 extends Phaser.Scene
         lvlcomplete = true
         deathcause = 1
         hurt.play()
+        player.anims.play('death')
     }
 
     death(player, bird)
