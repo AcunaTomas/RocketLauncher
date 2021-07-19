@@ -25,8 +25,8 @@ class loader extends Phaser.Scene
 
             case 2:
 
-                this.load.image('background2', '../assets/background2.png')
-                this.load.tilemapTiledJSON('map2', '../assets/maps/Leveldos.json')
+                this.load.image('background2', 'assets/background2.png')
+                this.load.tilemapTiledJSON('map2', 'assets/maps/Leveldos.json')
                 mapsizex = 4960
                 mapsizey = 2880
                 console.log(2)
