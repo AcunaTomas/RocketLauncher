@@ -11,7 +11,7 @@ class initalloader extends Phaser.Scene
         this.load.image('loading', 'assets/loadket.png')
 
         this.load.audio('menu', 'assets/music/menu.wav')
-        this.load.audio('gver', '../assets/music/gver.wav')
+        this.load.audio('gver', 'assets/music/gver.wav')
 
         //images
         this.load.image('mbackground','assets/Nuevo/Title.png')
@@ -34,7 +34,7 @@ class initalloader extends Phaser.Scene
          this.load.image('baloon', 'assets/Nuevo/Globo.png')
          this.load.image('clock', 'assets/Nuevo/Clock.png')
          //sprites
-         this.load.spritesheet('fuel','assets/Nuevo/gas.png', {frameWidth: 32, frameHeight: 40})
+         this.load.spritesheet('fuel','assets/Nuevo/Gas.png', {frameWidth: 32, frameHeight: 40})
          this.load.spritesheet('ring' , 'assets/Nuevo/Aro.png', {frameWidth: 88, frameHeight: 128})
          this.load.spritesheet('marselo', 'assets/Nuevo/Mashio.png', { frameWidth: 45, frameHeight: 73 })
          this.load.spritesheet('judge', 'assets/Nuevo/Judge1.png', { frameWidth: 56, frameHeight: 144 })
