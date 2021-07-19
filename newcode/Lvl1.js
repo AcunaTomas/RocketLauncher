@@ -69,11 +69,12 @@ class Lvl1 extends Phaser.Scene
         
         //Reset Game State Variables
 
-        deathcause = 0
-        lvlcomplete = false
-        hoopcombo = 0
-        score = 0
-        comboval = 0
+        deathcause = 0;
+        lvlcomplete = false;
+        hoopcombo = 0;
+        score = 0;
+        comboval = 0;
+        var ringcount = 0;
         pwup = false
         firstpickup = false;
 
@@ -92,18 +93,31 @@ class Lvl1 extends Phaser.Scene
         this.time.addEvent(limit);
 
         //HUD
-        combotext = this.add.text(32, 50, '', { fontSize: '28px', fill: '#000' });
+        combotext = this.add.text(16, 90, '', { fontSize: '28px', fill: '#000' });
         timetext = this.add.text(40, 8, '', { fontSize: '28px', fill: '#000' });
-        timetext.scrollFactorX = 0
-        timetext.scrollFactorY = 0
+        ringtext = this.add.text(32, 50, '', { fontSize: '28px', fill: '#000' });
+        scoretext = this.add.text(8, 150, '', { fontSize: '28px', fill: '#000' });
+        livestext = this.add.text(32, 100, '', { fontSize: '28px', fill: '#000' });
+
         var clock = this.add.image(16,16, 'clock')
         var hudring = this.add.image(16,55, 'ring').setScale(0.3)
+        var ballos = this.add.image(16,110, 'baloon').setScale(0.7)
+        ballos.scrollFactorX = 0
+        ballos.scrollFactorY = 0
         hudring.scrollFactorX = 0
         hudring.scrollFactorY = 0
         clock.scrollFactorX = 0
         clock.scrollFactorY = 0
+        ringtext.scrollFactorX = 0
+        ringtext.scrollFactorY = 0
         combotext.scrollFactorX = 0
         combotext.scrollFactorY = 0
+        timetext.scrollFactorX = 0
+        timetext.scrollFactorY = 0
+        livestext.scrollFactorX = 0
+        livestext.scrollFactorY = 0
+        scoretext.scrollFactorX = 0
+        scoretext.scrollFactorY = 0
 
         //Collision
 
@@ -283,9 +297,11 @@ class Lvl1 extends Phaser.Scene
                 })
             }
 
-            combotext.setText(':' + comboval.toString() + ' Score:' + score.toString() + " Lives: " + lives)
+            //combotext.setText('Combo:' + comboval.toString())
+            ringtext.setText(':' + ringcount.toString() + '  Combo:' + comboval.toString())
             timetext.setText(':' + limit.getProgress().toString().substr(2,2))
-
+            scoretext.setText('Score:' + score.toString())
+            livestext.setText(':' + lives.toString())
 
 
         }
@@ -303,9 +319,11 @@ class Lvl1 extends Phaser.Scene
     ringcombo(player, rings)
     {
         rings.destroy(true,true);
+        ringcount += 1
         ringsnd.play()
-        comboval += 1;
         score += 100 + (100*comboval);
+        comboval += 1;
+
 
         if (firstpickup)
         {
