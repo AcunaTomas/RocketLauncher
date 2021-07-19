@@ -45,6 +45,7 @@ class loader extends Phaser.Scene
     create(delta)
     {
         this.sound.stopAll();
+        ringcount = 0
         var ta
         ta = this.add.text(125, 300, '', { fontSize: '28px', fill: '#FFF' });
         var hint = this.add.text(120, 50, 'Consejo: al agarrar un aro,\nse te otorga un periodo de 10 segundos\nen el que conseguiras mas puntos de lo normal', { fontSize: '22px', fill: '#FFF' });
